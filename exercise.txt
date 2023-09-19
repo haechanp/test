@@ -1,0 +1,18 @@
+exercise
+1.cass
+
+2
+(1)메소드가 존재하지않음(수정본 파일 첨부)
+(2)SampleProgram.java
+(3)javac SampleProgram.java
+(4)java SampleProgram
+
+3
+int _i;와double 1var;
+
+4
+(1)int height;
+(2) double size = 0.25
+(3) double total = (double)height + size
+(4) char c = 'a'
+(5) String name = "자신의 이름"

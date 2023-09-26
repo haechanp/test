@@ -27,6 +27,15 @@ public class act2 {
      }
 }
 
+*문제11*
+public class act2 {
+  public static void main(String[] args) {
+  String text ="\"를 출력할려면 \\ 다음에\"를 붙여 \\\"와 같이 하면 됩니다.";
+  System.out.println(text);
+     }
+ }
+ 답: "\"를 출력할려면 \\ 다음에\"를 붙여 \\\"와 같이 하면 됩니다."
+ 
 *문제12*
-나"java를100%"사랑
+나"java를100%"사랑해
 

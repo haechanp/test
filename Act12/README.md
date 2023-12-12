@@ -1,568 +1,189 @@
-파일 누락 업로딩 오류로인한 13일 아침 파일 수정
+13일 아침 파일 누락 확인으로 인한 수정
 
-1번
-
+1번문제
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
+public class HideButton extends JFrame{
+	private MyPanel panel = new MyPanel();
+	private JButton btn = new JButton("Hide/Show");
+	
+	private ImageIcon image = new ImageIcon("/Users/user/Desktop/practice/back.jpg");	// 경로는 다르게 설정해야 함
+	private Image img = image.getImage();
+	
+	int cnt = 0;		// 버튼이 몇 번 눌러졌는지 체크하기 위함
+	
+	public HideButton(){
+		setTitle("이미지 그리기 연습");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setContentPane(panel);
+		add(btn);							// "Hide/Show" 버튼을 컨텐츠팬에 추가
+		
+		// btn이 눌러질때마다 그림의 hide / show 설정 (익명 클래스 사용)
+		btn.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				cnt++;
+				if(cnt % 2 == 1) {		// 이미 이미지가 출력되어 있었다면 이미지를 없앰
+					img = null;
+					repaint();
+				}
+				else {					// 이미지가 없었다면 이미지를 설정
+					img = image.getImage();
+					repaint();
+				}
+			}
+		});
+		
+		setLayout(new FlowLayout());
+		setSize(300, 300);
+		setVisible(true);
+	}
+	
+	// paintComponent를 이용하여 이미지 그림
+	class MyPanel extends JPanel{
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(img, 0, 0, getWidth(), getHeight(), this);		// 화면에 꽉 차게 설정
+		}
+	}
+	
+	public static void main(String[] args) {
+		new HideButton();
+	}
 
-public class Chapter10 extends JFrame {
-    Chapter10(){
-        setTitle("CheckBox Practice");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new FlowLayout());
+ 2번문제
+ import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-        JCheckBox disableButton = new JCheckBox("버튼 비활성화");
-        JCheckBox hideButton = new JCheckBox("버튼 감추기");
-        JButton btn = new JButton("test Button");
-        c.add(disableButton);
-        c.add(hideButton);
-        c.add(btn);
-        disableButton.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange()==ItemEvent.SELECTED) {
-                    btn.setEnabled(false);
-                }
-                else {
-                    btn.setEnabled(true);
-                }
-            }
-        });
-        hideButton.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange()==ItemEvent.SELECTED) {
-                    btn.setVisible(false);
-                }
-                else {
-                    btn.setVisible(true);
-                }
-            }
-        });
-        setSize(300, 200);
-        setVisible(true);
-    }
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
-
-    public static void main(String args[]){
-        new Chapter10();
-    }
+public class CircleDraggedEx extends JFrame{
+	private MyPanel panel = new MyPanel();
+	public CircleDraggedEx(){
+		setTitle("이미지 위에 원 드래깅 연습");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setContentPane(panel);
+		setLayout(new FlowLayout());
+		setSize(300, 300);
+		setVisible(true);
+	}
+	
+	// paintComponent를 이용하여 이미지 그림
+	class MyPanel extends JPanel{
+		private ImageIcon image = new ImageIcon("/Users/user/Desktop/practice/back.jpg");	// 경로는 다르게 설정해야 함
+		private Image img = image.getImage();
+		int x = 100, y = 100;
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(img, 0, 0, getWidth(), getHeight(), this);		// 화면에 꽉 차게 설정
+			g.setColor(Color.green);
+			g.fillOval(x, y, 20, 20);								// 초기 위치는 (100, 100)으로 설정
+			
+			addMouseMotionListener(new MouseMotionAdapter() {
+				public void mouseDragged(MouseEvent e) {
+					// x와 y의 좌표를 드래그 된 위치로 바꾸고 repaint()
+					x = e.getX();
+					y = e.getY();
+					repaint();
+				}
+			});
+		}
+	}
+	
+	public static void main(String[] args) {
+		new CircleDraggedEx();
+	}
 }
 
-2번
-
+3번문제
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
-
-public class Chapter10 extends JFrame {
-    Chapter10(){
-        setTitle("JTextField and JComponent");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new FlowLayout());
-
-        JTextField textField = new JTextField(10);
-        JComboBox<String> comboBox = new JComboBox<>();
-
-        textField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                comboBox.addItem(textField.getText());
-                textField.setText("");
-            }
-        });
-
-        c.add(textField);
-        c.add(comboBox);
-
-        setSize(300, 200);
-        setVisible(true);
-    }
-
-
-    public static void main(String args[]){
-        new Chapter10();
-    }
+public class apple extends JFrame{
+	JLabel label = new JLabel();
+	ImageIcon icon = new ImageIcon("/Users/user/Desktop/practice/apple.jpg");
+	public apple() {
+		setTitle("이미지 레이블 드래깅 연습");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Container c = getContentPane();
+		c.setLayout(null);
+		
+		label.setIcon(icon);
+		label.setSize(icon.getIconWidth(), icon.getIconHeight());
+		c.add(label);
+		
+		c.addMouseMotionListener(new MouseAdapter(){
+			public void mouseDragged(MouseEvent e) {
+				Component c = (Component)e.getSource();
+				c.setLocation(e.getX(), e.getY());
+			}
+		});
+		
+		setVisible(true);
+		setSize(500, 500);
+	}
+	public static void main(String[] args) {
+		new apple();
+	}
 }
 
-3번
-
+4번문제
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
-public class Chapter10 extends JFrame {
-    Chapter10(){
-        JTextField textField = new JTextField(10);
-        JTextField result[] = new JTextField[8];
-        JButton btn = new JButton("계산");
-        JLabel money[] = new JLabel[8];
-        String[] str = {"오만원", "만원", "천원", "500원", "100원", "50원", "10원", "1원"};
-        int[] won = {50000, 10000, 1000, 500, 100, 50, 10, 1};
-        setTitle("Money Charger");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new BorderLayout());
-
-        JPanel mPanel = new JPanel();
-        mPanel.setLayout(new FlowLayout());
-        mPanel.add(new JLabel("금액"));
-        mPanel.add(textField);
-        mPanel.add(btn);
-        mPanel.setBackground(Color.pink);
-
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int total = Integer.parseInt(textField.getText());
-                for(int i = 0; i < 7; i++) {
-                    result[i].setText(Integer.toString(total/won[i]));
-                    total %= won[i];
-                }
-            }
-        });
-
-        JPanel sPanel = new JPanel();
-        sPanel.setLayout(new GridLayout(8, 2));
-        sPanel.setBackground(Color.PINK);
-        for(int i = 0; i < 8; i++){
-            money[i] = new JLabel(str[i]);
-            result[i] = new JTextField();
-            sPanel.add(money[i]);
-            sPanel.add(result[i]);
-        }
-
-
-        setSize(300, 400);
-        c.add(sPanel, BorderLayout.CENTER);
-        c.add(mPanel, BorderLayout.NORTH);
-        setVisible(true);
-    }
-
-
-    public static void main(String args[]){
-        new Chapter10();
-    }
+public class apple extends JFrame{
+	private MyPanel panel = new MyPanel(); 
+	public apple() {
+		setTitle("이미지 레이블 드래깅 연습");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setContentPane(panel);		// panel을 CONTENTPANE으로 설정
+		setVisible(true);
+		setSize(500, 500);
+	}
+	
+	class MyPanel extends JPanel{
+		private ImageIcon image = new ImageIcon("/Users/user/Desktop/practice/apple.jpg");
+		private Image img = image.getImage();
+		int x = 0 , y = 0;
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(img, x, y, getWidth()/4, getHeight()/4, this);	// 이미지의 크기에 따라서 가변적으로 설정
+			addMouseMotionListener(new MouseMotionAdapter() {	// 마우스 어댑터를 익명 클래스를 활용하여 구현
+				public void mouseDragged(MouseEvent e) {
+					x = e.getX();
+					y = e.getY();
+					repaint();					// 현재 마우스의 좌표를 받아온 후 repaint()
+				}
+			});
+		}
+	}
+	public static void main(String[] args) {
+		new apple();
+	}
 }
-
-4번
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class Chapter10 extends JFrame {
-    Chapter10(){
-        JTextField textField = new JTextField(10);
-        JTextField result[] = new JTextField[8];
-        JButton btn = new JButton("계산");
-        JLabel money[] = new JLabel[8];
-        JCheckBox check[]=new JCheckBox[7];
-        String[] str = {"오만원", "만원", "천원", "500원", "100원", "50원", "10원", "1원"};
-        int[] won = {50000, 10000, 1000, 500, 100, 50, 10, 1};
-        setTitle("Money Charger");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new BorderLayout());
-
-        JPanel mPanel = new JPanel();
-        mPanel.setLayout(new FlowLayout());
-        mPanel.add(new JLabel("금액"));
-        mPanel.add(textField);
-        mPanel.add(btn);
-        mPanel.setBackground(Color.pink);
-
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int total = Integer.parseInt(textField.getText());
-                for(int i = 0; i < 8; i++) {
-                    if(i == 7){
-                        result[i].setText(Integer.toString(total));
-                        return;
-                    }
-                    if(check[i].isSelected()){
-                        result[i].setText(Integer.toString(total/won[i]));
-                        total %= won[i];
-                    }
-                    else{
-                        result[i].setText("0");
-                    }
-
-                }
-            }
-        });
-
-        JPanel sPanel = new JPanel();
-        sPanel.setLayout(new GridLayout(8, 2));
-        sPanel.setBackground(Color.PINK);
-        for(int i = 0; i < 8; i++){
-            money[i] = new JLabel(str[i]);
-            result[i] = new JTextField();
-            sPanel.add(money[i]);
-            sPanel.add(result[i]);
-            if(i<7) {
-                check[i]=new JCheckBox();
-                check[i].setBackground(Color.pink);
-                sPanel.add(check[i]);
-            }
-        }
-
-
-        setSize(300, 400);
-        c.add(sPanel, BorderLayout.CENTER);
-        c.add(mPanel, BorderLayout.NORTH);
-        setVisible(true);
-    }
-
-
-    public static void main(String args[]){
-        new Chapter10();
-    }
-}
-
-
-5번
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class Chapter10 extends JFrame {
-    Chapter10(){
-        setTitle("JSlider Practice Frame");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new FlowLayout());
-        JSlider slider = new JSlider(100, 200, 120); // min. max. init value
-        JLabel label = new JLabel("120");
-        label.setOpaque(true);
-        label.setBackground(Color.GREEN);
-        slider.setMajorTickSpacing(20);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider temp = (JSlider) e.getSource();
-                label.setText(Integer.toString(temp.getValue()));
-            }
-        });
-        c.add(slider);
-        c.add(label);
-
-        setSize(300, 200);
-        setVisible(true);
-    }
-
-
-    public static void main(String args[]){
-        new Chapter10();
-    }
-}
-
-5번
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class Chapter10 extends JFrame {
-    Chapter10(){
-        setTitle("JSlider Practice Frame");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new FlowLayout());
-        JSlider slider = new JSlider(100, 200, 120); // min. max. init value
-        JLabel label = new JLabel("120");
-        label.setOpaque(true);
-        label.setBackground(Color.GREEN);
-        slider.setMajorTickSpacing(20);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider temp = (JSlider) e.getSource();
-                label.setText(Integer.toString(temp.getValue()));
-            }
-        });
-        c.add(slider);
-        c.add(label);
-
-        setSize(300, 200);
-        setVisible(true);
-    }
-
-
-    public static void main(String args[]){
-        new Chapter10();
-    }
-}
-
-7번
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-
-public class Chapter10 extends JFrame {
-    Chapter10(){
-        JSlider slider = new JSlider(0, 100, 0); // min. max. init value
-        JLabel label = new JLabel("I Love Java");
-        setTitle("JSlider Practice Frame");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new GridLayout(3,1));
-        slider.setMajorTickSpacing(20);
-        slider.setMinorTickSpacing(5);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider temp = (JSlider) e.getSource();
-                label.setFont(new Font("Arial", Font.PLAIN, temp.getValue()));
-            }
-        });
-
-        c.add(slider, BorderLayout.NORTH);
-        c.add(label, BorderLayout.CENTER);
-
-        setSize(500, 500);
-        setVisible(true);
-    }
-
-
-    public static void main(String args[]){
-        new Chapter10();
-    }
-}
-
-
-8번
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-public class Chapter11 extends JFrame {
-    JRadioButton radioButtons[] = new JRadioButton[2];
-    ImageIcon imageIcons[] = {new ImageIcon("images/Facebook.png"), new ImageIcon("images/google.png"), new ImageIcon("images/naver.png")};
-    JLabel imageLabel = new JLabel(imageIcons[0]);
-    int selectIndex = 0;
-    Chapter11(){
-
-        setTitle("Image Gallary Practice Frame");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new BorderLayout());
-
-        JPanel top = new JPanel();
-        top.setLayout(new FlowLayout());
-
-        radioButtons[0] = new JRadioButton("left");
-        radioButtons[0].setSelected(true);
-        radioButtons[1] = new JRadioButton("Right");
-
-        top.add(radioButtons[0]);
-        top.add(radioButtons[1]);
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(radioButtons[0]);
-        group.add(radioButtons[1]);
-
-        c.add(top, BorderLayout.NORTH);
-        c.add(imageLabel, BorderLayout.CENTER);
-
-        imageLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(radioButtons[0].isSelected()){
-                    selectIndex++;
-                    if(selectIndex > 2){
-                        selectIndex = 0;
-                    }
-                }
-                else{
-                    selectIndex--;
-                    if(selectIndex < 0){
-                        selectIndex = imageIcons.length - 1;
-                    }
-                }
-                imageLabel.setIcon(imageIcons[selectIndex]);
-
-            }
-        });
-        setSize(300,300);
-        setVisible(true);
-    }
-    public static void main(String args[]){
-        new Chapter11();
-    }
-}
-
-9번
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-public class Chapter11 extends JFrame {
-    JButton btn[] = new JButton[3];
-    ImageIcon imageIcons[] = {new ImageIcon("images/scissor.png"), new ImageIcon("images/rock.png"), new ImageIcon("images/paper.png")};
-    JLabel userLabel = new JLabel("me");
-    JLabel computerLabel = new JLabel("com");
-    int user, computer;
-    JLabel result = new JLabel();
-    Chapter11(){
-
-        setTitle("가위 바위 보 게임");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Container c = getContentPane();
-        c.setLayout(new BorderLayout());
-
-        JPanel top = new JPanel();
-        top.setLayout(new FlowLayout());
-
-        for(int i = 0; i < 3; i++){
-            btn[i] = new JButton(imageIcons[i]);
-            btn[i].addActionListener(new game(i));
-            top.add(btn[i]);
-        }
-        top.setBackground(Color.gray);
-        c.add(top, BorderLayout.NORTH);
-
-        JPanel center = new JPanel();
-        center.setLayout(new FlowLayout());
-        center.add(userLabel);
-        center.add(computerLabel);
-        result.setForeground(Color.RED);
-        center.add(result);
-        center.setBackground(Color.YELLOW);
-        c.add(center, BorderLayout.CENTER);
-
-        setSize(1000,800);
-        setVisible(true);
-    }
-
-    class game implements ActionListener{
-        int index;
-        game(int i){
-            index = i;
-        }
-        public void actionPerformed(ActionEvent e){
-            user = index;
-            computer = (int)(Math.random()*3);
-            userLabel.setIcon(imageIcons[user]);
-            computerLabel.setIcon(imageIcons[computer]);
-
-            if(user == computer){
-                result.setText("SAME!!");
-            }
-            else if(user - computer == -2 || user - computer == 1){
-                result.setText("ME !!");
-            }else{
-                result.setText("COM !!");
-            }
-        }
-    }
-
-    public static void main(String args[]){
-        new Chapter11();
-    }
-}
-
-10번
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-public class Chapter11 extends JFrame {
-    int count = 0;
-    Chapter11(){
-        setTitle("Ten 레이블 클릭");
-        setDefaultCloseOperation(3);
-        JLabel[] labels = new JLabel[10];
-        JPanel panel = new JPanel();
-
-        panel.setLayout(null);
-
-        for(int i= 0; i <labels.length; i++)
-
-        {
-
-            int x = (int)(Math.random()*300);
-
-            int y = (int)(Math.random()*300);
-
-            labels[i] = new JLabel();
-
-            labels[i].setText(Integer.toString(i));
-
-            labels[i].setSize(15, 15);
-
-            labels[i].setLocation(x, y);
-
-            labels[i].addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    super.mouseClicked(e);
-                    JLabel temp = new JLabel();
-                    temp = (JLabel) e.getSource();
-                    if(Integer.parseInt(temp.getText()) <= Integer.parseInt(labels[count].getText())){
-                        temp.setVisible(false);
-                        count++;
-                        if(Integer.parseInt(temp.getText()) == 9){
-                            for(int i = 0; i< labels.length; i++){
-                                int x = (int)(Math.random()*300);
-
-                                int y = (int)(Math.random()*300);
-
-                                labels[i].setLocation(x, y);
-
-                                labels[i].setVisible(true);
-                            }
-                        }
-                    }
-                }
-            });
-            labels[i].setForeground(Color.MAGENTA);
-            panel.add(labels[i]);
-        }
-
-        this.add(panel);
-
-        setSize(350,350);
-        setVisible(true);
-    }
-
-
-    public static void main(String args[]){
-        new Chapter11();
-    }
-}
-
-
